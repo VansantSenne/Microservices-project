@@ -11,6 +11,6 @@ import java.util.List;
 
 @Repository
 @Transactional
-public interface CatalogusRepository {
+public interface CatalogusRepository extends JpaRepository<Catalogus, Long>  {
     List<Catalogus> findByCodeIn(List<String> code);
 }
