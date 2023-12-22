@@ -12,6 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BoekingResponse {
+    private Long profielId;
     private String boekingNummer;
-    private List<BoekingLineOrderDto> boekingLineOrderItemsList;
+    private List<BoekingLineOrderDto> boekingLineOrdersList;
 }

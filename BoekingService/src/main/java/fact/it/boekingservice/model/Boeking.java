@@ -18,6 +18,7 @@ public class Boeking {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String boekingNummer;
+    private Long profielId;
     @OneToMany(cascade = CascadeType.ALL)
     private List<BoekingLineOrder> boekingLineOrdersList;
 }

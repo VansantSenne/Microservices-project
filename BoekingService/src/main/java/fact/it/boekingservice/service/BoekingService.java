@@ -19,52 +19,36 @@ import java.util.stream.Collectors;
 public class BoekingService {
     private final BoekingRepository boekingRepository;
     private final WebClient webClient;
-
-    public boolean placeBoeking(BoekingRequest boekingRequest) {
-       Boeking boeking = new Boeking();
+    public boolean maakBoeking(BoekingRequest boekingRequest) {
+        Boeking boeking = new Boeking();
         boeking.setBoekingNummer(UUID.randomUUID().toString());
-
-        List<BoekingLineOrder> boekingLineOrders = boekingRequest.getBoekingLineOrdersDtoList()
-                .stream()
-                .map(this::mapToOrderLineItem)
+        boeking.setProfielId(boekingRequest.getProfielId());
+        List<BoekingLineOrder> boekingLineItems = boekingRequest.getBoekingLineOrderDtoList().stream()
+                .map(this::toBoekingLineOrder)
                 .toList();
 
-        boeking.setBoekingLineOrdersList(boekingLineOrders);
+        boeking.setBoekingLineOrdersList(boekingLineItems);
 
-        List<String> codes = boeking.getBoekingLineOrdersList().stream()
-                .map(BoekingLineOrder::getCode)
+        List<String> vluchtNummers = boeking.getBoekingLineOrdersList().stream()
+                .map(BoekingLineOrder::getVluchtNummer)
                 .toList();
 
-        CatalogusResponse[] inventoryResponseArray = webClient.get()
-                .uri("http://localhost:8082/api/catalogus",
-                        uriBuilder -> uriBuilder.queryParam("code", codes).build())
+        CatalogusResponse[] catalogusResponseArray = webClient.get()
+                .uri("http://localhost:8081/api/catalogus",
+                        uriBuilder -> uriBuilder.queryParam("vluchtNummer", vluchtNummers).build())
                 .retrieve()
                 .bodyToMono(CatalogusResponse[].class)
                 .block();
 
-        boolean allProductsInStock = Arrays.stream(catalogusResponseArray)
-                .allMatch(CatalogusResponse::available);
+        boolean allFlightsAvailable = Arrays.stream(catalogusResponseArray).noneMatch(CatalogusResponse::isVolgeboekt);
 
-        if(allProductsInStock){
-            ProfielResponse[] productResponseArray = webClient.get()
-                    .uri("http://localhost:8080/api/profiel",
-                            uriBuilder -> uriBuilder.queryParam("code", codes).build())
-                    .retrieve()
-                    .bodyToMono(ProfielResponse[].class)
-                    .block();
-
-            boeking.getBoekingLineOrdersList().stream()
-                    .map(boekingItem -> {
-                        ProfielResponse product = Arrays.stream(profielResponseArray)
-                                .filter(p -> p.getCode().equals(boekingItem.getCode()))
-                                .findFirst()
-                                .orElse(null);
-                        if (product != null) {
-                            boekingItem.setPrijs(product.getPrijs());
-                        }
-                        return boekingItem;
-                    })
-                    .collect(Collectors.toList());
+        if(allFlightsAvailable){
+            for (BoekingLineOrder boekingLineItem: boeking.getBoekingLineOrdersList()) {
+                CatalogusResponse catalogusResponse = Arrays.stream(catalogusResponseArray).filter(c -> c.getVluchtNummer().equals(boekingLineItem.getVluchtNummer())).findFirst().orElse(null);
+                if (catalogusResponse != null) {
+                    boekingLineItem.setPrijs(catalogusResponse.getPrijs());
+                }
+            }
 
             boekingRepository.save(boeking);
             return true;
@@ -72,37 +56,69 @@ public class BoekingService {
             return false;
         }
     }
+    public boolean putBoekingLineOrder(String boekingNummer, BoekingLineOrderDto boekingLineOrderDto) {
+        Boeking boeking = boekingRepository.findByBoekingNummer(boekingNummer);
 
-    public List<BoekingResponse> getAllBoekingen() {
-        List<Boeking> boekingen = boekingRepository.findAll();
+        if (boeking != null) {
+            // Zoek de boekingsregel die moet worden bijgewerkt
+            BoekingLineOrder boekingLineOrder = boeking.getBoekingLineOrdersList().stream()
+                    .filter(lineOrder -> lineOrder.getVluchtNummer().equals(boekingLineOrderDto.getVluchtNummer()))
+                    .findFirst()
+                    .orElse(null);
 
-        return boekingen.stream()
-                .map(boeking -> new BoekingResponse(
-                        boeking.getBoekingNummer(),
-                        mapToBoekingLineOrdersDto(boeking.getBoekingLineOrdersList())
-                ))
-                .collect(Collectors.toList());
+            if (boekingLineOrder != null) {
+                // Werk de boekingsregel bij met de nieuwe informatie
+                boekingLineOrder.setPrijs(boekingLineOrderDto.getPrijs());
+                boekingLineOrder.setHoeveelheid(boekingLineOrderDto.getHoeveelheid());
+
+                // Andere velden blijven ongewijzigd
+
+                // Opslaan van de bijgewerkte boeking
+                boekingRepository.save(boeking);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    public boolean deleteBoeking(String boekingNummer) {
+        Boeking boeking = boekingRepository.findByBoekingNummer(boekingNummer);
+
+        if (boeking != null) {
+            // Verwijder de hele boeking
+            boekingRepository.delete(boeking);
+            return true;
+        }
+
+        return false;
+    }
+    public List<BoekingResponse> getBoekingen(Long profielId) {
+        List<Boeking> boekingen = boekingRepository.findByProfielId(profielId);
+        return boekingen.stream().map(this::toBoekingResponse).collect(Collectors.toList());
     }
 
-    private BoekingLineOrder mapToOrderLineItem(BoekingLineOrderDto boekingLineOrderDto) {
+    private BoekingResponse toBoekingResponse(Boeking boeking) {
+        BoekingResponse boekingResponse = new BoekingResponse();
+        boekingResponse.setBoekingNummer(boeking.getBoekingNummer());
+        boekingResponse.setProfielId(boeking.getProfielId());
+        boekingResponse.setBoekingLineOrdersList(boeking.getBoekingLineOrdersList().stream().map(this::toBoekingLineOrderDto).collect(Collectors.toList()));
+        return boekingResponse;
+    }
+    private BoekingLineOrder toBoekingLineOrder(BoekingLineOrderDto boekingLineOrderDto){
         BoekingLineOrder boekingLineOrder = new BoekingLineOrder();
         boekingLineOrder.setPrijs(boekingLineOrderDto.getPrijs());
         boekingLineOrder.setHoeveelheid(boekingLineOrderDto.getHoeveelheid());
-        boekingLineOrder.setCode(boekingLineOrderDto.getCode());
+        boekingLineOrder.setVluchtNummer(boekingLineOrderDto.getVluchtNummer());
         return boekingLineOrder;
     }
 
-    private List<BoekingLineOrderDto> mapToBoekingLineOrdersDto(List<BoekingLineOrder> boekingLineOrders) {
-        return boekingLineOrders.stream()
-                .map(boekingLineOrder -> new BoekingLineOrderDto(
-                        boekingLineOrder.getId(),
-                        boekingLineOrder.getCode(),
-                        boekingLineOrder.getPrijs(),
-                        boekingLineOrder.getHoeveelheid()
-                ))
-                .collect(Collectors.toList());
+    private BoekingLineOrderDto toBoekingLineOrderDto(BoekingLineOrder boekingLineOrder) {
+        BoekingLineOrderDto boekingLineOrderDto = new BoekingLineOrderDto();
+        boekingLineOrderDto.setVluchtNummer(boekingLineOrder.getVluchtNummer());
+        boekingLineOrderDto.setPrijs(boekingLineOrder.getPrijs());
+        boekingLineOrderDto.setHoeveelheid(boekingLineOrder.getHoeveelheid());
+        return boekingLineOrderDto;
     }
-
 
 
 }

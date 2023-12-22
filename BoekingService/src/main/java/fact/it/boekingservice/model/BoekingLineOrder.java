@@ -17,7 +17,7 @@ public class BoekingLineOrder {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String code;
+    private String vluchtNummer;
     private BigDecimal prijs;
     private Integer hoeveelheid;
 }
