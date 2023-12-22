@@ -1,12 +1,15 @@
 package fact.it.profielservice.controller;
 
 import fact.it.profielservice.dto.ProfielResponse;
+import fact.it.profielservice.model.Profiel;
 import fact.it.profielservice.service.ProfielService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/profiel")
@@ -15,11 +18,15 @@ public class ProfielController {
 
     private final ProfielService profielService;
 
-    // http://localhost:8082/api/inventory?skuCode=tube6in&skuCode=beam10ft
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProfielResponse> actief
-    (@RequestParam List<String> code) {
-        return profielService.actief(code);
+    public List<Profiel> getAllProfielen() {
+        return profielService.getAllProfielen();
+    }
+    @GetMapping("/{id}")
+    public ResponseEntity<Profiel> getProfielById(@PathVariable Long id) {
+        Optional<Profiel> profiel = profielService.getProfielById(id);
+        return profiel.map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 }

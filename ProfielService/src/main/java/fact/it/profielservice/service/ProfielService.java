@@ -9,10 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,27 +21,22 @@ public class ProfielService {
     public void loadData() {
         if(profielRepository.count() > 0){
             Profiel profiel = new Profiel();
-            profiel.setCode("tube6in");
-            profiel.setName("plop");
+            profiel.setActief(true);
+
 
             Profiel profiel1 = new Profiel();
-            profiel1.setCode("beam10ft");
-            profiel1.setName("kwebbel");
+            profiel1.setActief(true);
+
 
             profielRepository.save(profiel);
             profielRepository.save(profiel1);
         }
     }
 
-    @Transactional(readOnly = true)
-    public List<ProfielResponse> actief(List<String> code) {
-
-        return profielRepository.findByCodeIn(code).stream()
-                .map(profiel ->
-                        ProfielResponse.builder()
-                                .code(profiel.getCode())
-                                .active(!Objects.equals(profiel.getName(), ""))
-                                .build()
-                ).toList();
+    public List<Profiel> getAllProfielen() {
+        return profielRepository.findAll();
+    }
+    public Optional<Profiel> getProfielById(Long id) {
+        return profielRepository.findById(id);
     }
 }

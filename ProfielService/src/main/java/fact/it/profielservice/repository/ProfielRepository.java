@@ -13,5 +13,5 @@ import java.util.List;
 @Transactional
 public interface ProfielRepository extends  JpaRepository<Profiel, Long>{
 
-    List<Profiel> findByCodeIn(List<String> code);
+    List<Profiel> findById(List<Long> id);
 }

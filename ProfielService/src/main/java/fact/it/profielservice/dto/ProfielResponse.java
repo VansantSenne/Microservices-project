@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class ProfielResponse {
-    private String code;
-    private boolean active;
+
+    private boolean actief;
 }
