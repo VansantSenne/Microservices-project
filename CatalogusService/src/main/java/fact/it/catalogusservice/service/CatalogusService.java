@@ -7,10 +7,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal;
 import java.sql.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,12 +23,14 @@ public class CatalogusService {
     public void loadData() {
         if(catalogusRepository.count() > 0){
             Catalogus catalogus = new Catalogus();
-            catalogus.setCode("tube6in");
-            catalogus.setQuantity(100);
+            catalogus.setVluchtNummer("tube6in");
+            catalogus.setPrijs(BigDecimal.valueOf(400));
+            catalogus.isVolgeboekt();
 
             Catalogus catalogus1 = new Catalogus();
-            catalogus1.setCode("beam10ft");
-            catalogus1.setQuantity(0);
+            catalogus1.setVluchtNummer("beam10ft");
+            catalogus1.setPrijs(BigDecimal.valueOf(525.99));
+            catalogus1.isVolgeboekt();
 
             catalogusRepository.save(catalogus);
             catalogusRepository.save(catalogus1);
@@ -34,14 +38,26 @@ public class CatalogusService {
     }
 
     @Transactional(readOnly = true)
-    public List<CatalogusResponse> available(List<String> code) {
-
-        return catalogusRepository.findByCodeIn(code).stream()
+    public List<CatalogusResponse> available(List<String> vluchtNummer) {
+        return catalogusRepository.findByCodeIn(vluchtNummer).stream()
                 .map(catalogus ->
                         CatalogusResponse.builder()
-                                .code(catalogus.getCode())
-                                .available(catalogus.getQuantity() > 0)
+                                .vluchtNummer(catalogus.getVluchtNummer())
+                                .prijs(catalogus.getPrijs())
+                                .isVolgeboekt(catalogus.isVolgeboekt())
                                 .build()
-                ).toList();
+                ).collect(Collectors.toList());
+    }
+
+    @Transactional(readOnly = true)
+    public List<CatalogusResponse> getAllFlights() {
+        return catalogusRepository.findAll().stream()
+                .map(catalogus ->
+                        CatalogusResponse.builder()
+                                .vluchtNummer(catalogus.getVluchtNummer())
+                                .prijs(catalogus.getPrijs())
+                                .isVolgeboekt(catalogus.isVolgeboekt())
+                                .build()
+                ).collect(Collectors.toList());
     }
 }
