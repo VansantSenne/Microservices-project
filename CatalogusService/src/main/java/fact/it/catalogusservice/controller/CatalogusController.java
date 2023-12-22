@@ -21,4 +21,10 @@ public class CatalogusController {
     (@RequestParam List<String> code) {
         return catalogusService.available(code);
     }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<CatalogusResponse> getAllFlights() {
+        return catalogusService.getAllFlights();
+    }
 }

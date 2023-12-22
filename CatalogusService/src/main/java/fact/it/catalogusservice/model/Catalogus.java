@@ -7,6 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Entity
 @Table(name = "catalogus")
 @Getter
@@ -17,6 +19,7 @@ public class Catalogus {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String code;
-    private Integer quantity;
+    private String vluchtNummer;
+    private BigDecimal prijs;
+    private boolean isVolgeboekt;
 }
