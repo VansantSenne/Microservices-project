@@ -18,17 +18,17 @@ jobs:
           distribution: adopt
       
       - name: Build, test and package project
-        working-directory: ./BoekingService
+        working-directory: ./boekingService
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/BoekingService:latest ./BoekingService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/boekingService:latest ./boekingService
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/BoekingService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/boekingService:latest
   catalogusservice:
     runs-on: ubuntu-latest
     name: Java 17 build, test, deliver catalogus-service container
@@ -44,17 +44,17 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./CatalogusService
+        working-directory: ./catalogusService
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/CatalogusService:latest ./CatalogusService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/catalogusService:latest ./catalogusService
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/CatalogusService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/catalogusService:latest
   profielservice:
     runs-on: ubuntu-latest
     name: Java 17 build, test, deliver profiel-service container
@@ -70,17 +70,17 @@ jobs:
           distribution: adopt
         
       - name: Build, test and package project
-        working-directory: ./ProfielService
+        working-directory: ./profielService
         run: mvn package -B -DskipTests
         
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/ProfielService:latest ./ProfielService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/profielService:latest ./profielService
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/ProfielService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/profielService:latest
   beoordelingsservice:
     runs-on: ubuntu-latest
     name: Java 17 build, test, deliver beoordeling-service container
@@ -96,40 +96,15 @@ jobs:
           distribution: adopt
         
       - name: Build, test and package project
-        working-directory: ./BeoordelingsService
+        working-directory: ./beoordelingsService
         run: mvn package -B -DskipTests
         
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/BeoordelingsService:latest ./BeoordelingsService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/beoordelingsService:latest ./beoordelingsService
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/BeoordelingsService:latest
-  apigateway:
-    runs-on: ubuntu-latest
-    name: Java 17 build, test, deliver ede-api-gateway container
-    steps:
-      - name: Check out repository
-        uses: actions/checkout@v3
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v3
-        with:
-          java-version: 17
-          cache: maven
-          distribution: adopt
-
-      - name: Build, test and package project
-        working-directory: ./api-gateway
-        run: mvn package -B -DskipTests
-
-      - name: Docker login
-        run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Docker Build
-        run: docker build --build-arg GOOGLE_CLIENTID=${{ secrets.GOOGLE_CLIENTID }} --build-arg GOOGLE_CLIENTSECRET=${{ secrets.GOOGLE_CLIENTSECRET }} -t ${{ secrets.DOCKER_USER }}/ede-api-gateway:latest ./api-gateway
-
-      - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/ede-api-gateway:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/beoordelingsService:latest
+  
