@@ -18,17 +18,17 @@ jobs:
           distribution: adopt
       
       - name: Build, test and package project
-        working-directory: ./boekingService
+        working-directory: ./boekingservice
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/boekingService:latest ./boekingService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/boekingservice:latest ./boekingservice
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/boekingService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/boekingservice:latest
   catalogusservice:
     runs-on: ubuntu-latest
     name: Java 17 build, test, deliver catalogus-service container
@@ -44,17 +44,17 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./catalogusService
+        working-directory: ./catalogusservice
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/catalogusService:latest ./catalogusService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/catalogusservice:latest ./catalogusservice
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/catalogusService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/catalogusservice:latest
   profielservice:
     runs-on: ubuntu-latest
     name: Java 17 build, test, deliver profiel-service container
@@ -70,17 +70,17 @@ jobs:
           distribution: adopt
         
       - name: Build, test and package project
-        working-directory: ./profielService
+        working-directory: ./profielservice
         run: mvn package -B -DskipTests
         
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/profielService:latest ./profielService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/profielservice:latest ./profielservice
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/profielService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/profielservice:latest
   beoordelingsservice:
     runs-on: ubuntu-latest
     name: Java 17 build, test, deliver beoordeling-service container
@@ -96,15 +96,15 @@ jobs:
           distribution: adopt
         
       - name: Build, test and package project
-        working-directory: ./beoordelingsService
+        working-directory: ./beoordelingsservice
         run: mvn package -B -DskipTests
         
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/beoordelingsService:latest ./beoordelingsService
+        run: docker build -t ${{ secrets.DOCKER_USER }}/beoordelingsservice:latest ./beoordelingsservice
 
       - name: Upload container to Docker Hub with Push
-        run: docker push ${{ secrets.DOCKER_USER }}/beoordelingsService:latest
+        run: docker push ${{ secrets.DOCKER_USER }}/beoordelingsservice:latest
   
