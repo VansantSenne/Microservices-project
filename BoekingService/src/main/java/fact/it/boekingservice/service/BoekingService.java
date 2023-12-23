@@ -5,6 +5,7 @@ import fact.it.boekingservice.model.BoekingLineOrder;
 import fact.it.boekingservice.repository.BoekingRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 
@@ -17,6 +18,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class BoekingService {
+    @Value("${catalogusservice.baseurl}")
+    private String catalogusServiceBaseUrl;
     private final BoekingRepository boekingRepository;
     private final WebClient webClient;
     public boolean maakBoeking(BoekingRequest boekingRequest) {
@@ -34,7 +37,7 @@ public class BoekingService {
                 .toList();
 
         CatalogusResponse[] catalogusResponseArray = webClient.get()
-                .uri("http://localhost:8081/api/catalogus",
+                .uri("http://" + catalogusServiceBaseUrl + "/api/inventory",
                         uriBuilder -> uriBuilder.queryParam("vluchtNummer", vluchtNummers).build())
                 .retrieve()
                 .bodyToMono(CatalogusResponse[].class)
