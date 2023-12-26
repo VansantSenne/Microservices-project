@@ -49,7 +49,6 @@ services:
   depends_on:
     - mysql-catalogus
   image: vsensodyne/catalogusservice
-  retry: always
   ports:
     - 8082:8082
   links:
