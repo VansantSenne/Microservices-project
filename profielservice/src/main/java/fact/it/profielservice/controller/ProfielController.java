@@ -23,5 +23,5 @@ public class ProfielController {
     public List<Profiel> getAllProfielen() {
         return profielService.getAllProfielen();
     }
-  
+
 }
