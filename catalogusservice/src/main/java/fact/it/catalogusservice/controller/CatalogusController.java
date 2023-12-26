@@ -18,8 +18,8 @@ public class CatalogusController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<CatalogusResponse> available
-    (@RequestParam List<String> code) {
-        return catalogusService.available(code);
+    (@RequestParam List<String> vluchtNummer) {
+        return catalogusService.available(vluchtNummer);
     }
 
     @GetMapping

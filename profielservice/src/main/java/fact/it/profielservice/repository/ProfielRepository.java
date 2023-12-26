@@ -13,5 +13,5 @@ import java.util.List;
 @Transactional
 public interface ProfielRepository extends  JpaRepository<Profiel, Long>{
 
-    List<Profiel> findById(List<Long> id);
+    List<Profiel> findById(Long[] id);
 }
