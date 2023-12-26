@@ -49,6 +49,7 @@ services:
   depends_on:
     - mysql-catalogus
   image: vsensodyne/catalogusservice
+  retry: always
   ports:
     - 8082:8082
   links:
@@ -63,6 +64,7 @@ services:
   depends_on:
     - mysql-profiel
   image: vsensodyne/profielservice
+  retry: always
   ports:
     - 8080:8080
   links:
@@ -77,6 +79,7 @@ services:
   depends_on:
     - catalogus-service
   image: vsensodyne/boekingservice
+  retry: always
   ports:
     - 8081:8081
   links:
