@@ -45,7 +45,7 @@ services:
    MONGODB_PORT: 27017
    MONGODB_HOST: mongo-beoordelingen
    
- catalogusservice:
+ catalogus-service:
   depends_on:
     - mysql-catalogus
   image: vsensodyne/catalogusservice
@@ -59,7 +59,7 @@ services:
    MYSQL_DB_HOST: mysql-catalogus
    MYSQL_DB_PORT: 3307
 
- profielservice:
+ profiel-service:
   depends_on:
     - mysql-profiel
   image: vsensodyne/profielservice
@@ -73,16 +73,16 @@ services:
    MYSQL_DB_HOST: mysql-profiel
    MYSQL_DB_PORT: 3309 
 
- boekingservice:
+ boeking-service:
   depends_on:
-    - catalogusservice
+    - catalogus-service
   image: vsensodyne/boekingservice
   ports:
     - 8081:8081
   links:
-    - catalogusservice
+    - catalogus-service
   environment:
-   CATALOGUS_INFO_SERVICE_BASEURL: catalogusservice:8082
+   CATALOGUS_INFO_SERVICE_BASEURL: catalogus-service:8082
    MYSQL_DB_USERNAME: root
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-boeking
