@@ -18,14 +18,14 @@ jobs:
           distribution: adopt
       
       - name: Build, test and package project
-        working-directory: ./boekingservice
+        working-directory: ./boeking-service
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/boekingservice:latest ./boekingservice
+        run: docker build -t ${{ secrets.DOCKER_USER }}/boekingservice:latest ./boeking-service
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/boekingservice:latest
@@ -44,14 +44,14 @@ jobs:
           distribution: adopt
 
       - name: Build, test and package project
-        working-directory: ./catalogusservice
+        working-directory: ./catalogus-service
         run: mvn package -B -DskipTests
 
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/catalogusservice:latest ./catalogusservice
+        run: docker build -t ${{ secrets.DOCKER_USER }}/catalogusservice:latest ./catalogus-service
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/catalogusservice:latest
@@ -70,14 +70,14 @@ jobs:
           distribution: adopt
         
       - name: Build, test and package project
-        working-directory: ./profielservice
+        working-directory: ./profiel-service
         run: mvn package -B -DskipTests
         
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/profielservice:latest ./profielservice
+        run: docker build -t ${{ secrets.DOCKER_USER }}/profielservice:latest ./profiel-service
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/profielservice:latest
@@ -96,14 +96,14 @@ jobs:
           distribution: adopt
         
       - name: Build, test and package project
-        working-directory: ./beoordelingsservice
+        working-directory: ./beoordelings-service
         run: mvn package -B -DskipTests
         
       - name: Docker login
         run: docker login -u ${{ secrets.DOCKER_USER }} -p ${{ secrets.DOCKER_PASSWORD }}
 
       - name: Docker Build
-        run: docker build -t ${{ secrets.DOCKER_USER }}/beoordelingsservice:latest ./beoordelingsservice
+        run: docker build -t ${{ secrets.DOCKER_USER }}/beoordelingsservice:latest ./beoordelings-service
 
       - name: Upload container to Docker Hub with Push
         run: docker push ${{ secrets.DOCKER_USER }}/beoordelingsservice:latest
