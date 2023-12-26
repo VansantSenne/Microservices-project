@@ -24,14 +24,14 @@ services:
   environment:
    MYSQL_ROOT_PASSWORD: abc123
 
-  mysql-profiel:
-   image: mysql:latest
-   ports:
-     - 3308:3307
-   volumes:
-     - mysql_profiel_data:/var/lib/mysql
-   environment:
-    MYSQL_ROOT_PASSWORD: abc123
+ mysql-profiel:
+  image: mysql:latest
+  ports:
+    - 3308:3307
+  volumes:
+    - mysql_profiel_data:/var/lib/mysql
+  environment:
+   MYSQL_ROOT_PASSWORD: abc123
     
  beoordeling-service:
   depends_on:
