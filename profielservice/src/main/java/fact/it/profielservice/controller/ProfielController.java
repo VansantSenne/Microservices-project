@@ -23,10 +23,5 @@ public class ProfielController {
     public List<Profiel> getAllProfielen() {
         return profielService.getAllProfielen();
     }
-    @GetMapping("/{id}")
-    public ResponseEntity<Profiel> getProfielById(@PathVariable Long id) {
-        Optional<Profiel> profiel = profielService.getProfielById(id);
-        return profiel.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
-    }
+  
 }

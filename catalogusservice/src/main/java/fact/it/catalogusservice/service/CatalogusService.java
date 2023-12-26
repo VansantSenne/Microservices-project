@@ -39,14 +39,17 @@ public class CatalogusService {
 
     @Transactional(readOnly = true)
     public List<CatalogusResponse> available(List<String> vluchtNummer) {
-        return catalogusRepository.findByCodeIn(vluchtNummer).stream()
+        List<Catalogus> catalogusList = catalogusRepository.findByVluchtNummerIn(vluchtNummer);
+
+        return catalogusList.stream()
                 .map(catalogus ->
                         CatalogusResponse.builder()
                                 .vluchtNummer(catalogus.getVluchtNummer())
                                 .prijs(catalogus.getPrijs())
                                 .isVolgeboekt(catalogus.isVolgeboekt())
                                 .build()
-                ).collect(Collectors.toList());
+                )
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

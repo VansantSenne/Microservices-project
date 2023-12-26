@@ -12,5 +12,5 @@ import java.util.List;
 @Repository
 @Transactional
 public interface CatalogusRepository extends JpaRepository<Catalogus, Long>  {
-    List<Catalogus> findByCodeIn(List<String> vluchtNummer);
+    List<Catalogus> findByVluchtNummerIn(List<String> vluchtNummer);
 }

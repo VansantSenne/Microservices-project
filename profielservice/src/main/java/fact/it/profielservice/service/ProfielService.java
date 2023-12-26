@@ -36,7 +36,4 @@ public class ProfielService {
     public List<Profiel> getAllProfielen() {
         return profielRepository.findAll();
     }
-    public Optional<Profiel> getProfielById(Long id) {
-        return profielRepository.findById(id);
-    }
 }
