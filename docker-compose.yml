@@ -78,7 +78,6 @@ services:
   depends_on:
     - catalogus-service
   image: vsensodyne/boekingservice
-  retry: always
   ports:
     - 8081:8081
   links:
