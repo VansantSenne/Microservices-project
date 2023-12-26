@@ -58,6 +58,7 @@ services:
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-catalogus
    MYSQL_DB_PORT: 3307
+  command: ["sleep", "5"]
 
  profiel-service:
   depends_on:
@@ -72,6 +73,7 @@ services:
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-profiel
    MYSQL_DB_PORT: 3309 
+  command: ["sleep", "5"]
 
  boeking-service:
   depends_on:
@@ -87,6 +89,7 @@ services:
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-boeking
    MYSQL_DB_PORT: 3305
+  command: ["sleep", "5"]
 
 
 volumes:
