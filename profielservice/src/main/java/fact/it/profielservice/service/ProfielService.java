@@ -19,7 +19,7 @@ public class ProfielService {
 
     @PostConstruct
     public void loadData() {
-        if(profielRepository.count() > 0){
+        if(profielRepository.count() <= 0){
             Profiel profiel = new Profiel();
             profiel.setActief(true);
 
@@ -33,7 +33,7 @@ public class ProfielService {
         }
     }
 
-    public List<Profiel> getAllProfielen() {
+    public List<ProfielResponse> getAllProfielen() {
         return profielRepository.findAll();
     }
 }

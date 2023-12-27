@@ -20,7 +20,7 @@ public class ProfielController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<Profiel> getAllProfielen() {
+    public List<ProfielResponse> getAllProfielen() {
         return profielService.getAllProfielen();
     }
 
