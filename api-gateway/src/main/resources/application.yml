@@ -1,0 +1,57 @@
+server:
+  port: 8083
+
+logging:
+  level:
+    root: INFO
+    org.springframework.cloud.gateway: TRACE
+    org.springframework.cloud.gateway.route.RouteDefinitionRouteLocator: INFO
+    reactor.netty: TRACE
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: boeking-service-post
+          uri: http://localhost:8081
+          predicates:
+            - Path=/boekingen
+            - Method=POST
+          filters:
+            - SetPath=/api/boeking
+        - id: boeking-service-get
+          uri: http://localhost:8081
+          predicates:
+            - Path=/boekingen
+            - Method=GET
+          filters:
+            - SetPath=/api/boeking
+        - id: boeking-service-put
+          uri: http://localhost:8081
+          predicates:
+            - Path=/boekingen/{boekingNummer}
+            - Method=PUT
+          filters:
+            - SetPath=/api/boeking/{boekingNummer}
+        - id: boeking-service-delete
+          uri: http://localhost:8081
+          predicates:
+            - Path=/boekingen/{boekingNummer}
+            - Method=DELETE
+          filters:
+            - SetPath=/api/boeking/{boekingNummer}
+        - id: profiel-service-get
+          uri: http://localhost:8080
+          predicates:
+            - Path=/profielen
+            - method=GET
+          filters:
+            - SetPath=/api/profiel
+        - id: catalogus-service-get
+          uri: http://localhost:8082
+          predicates:
+            - Path=/catalogussen
+            - Method=GET
+          filters:
+            - SetPath=/api/catalogus
+
