@@ -87,6 +87,20 @@ services:
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-boeking
    MYSQL_DB_PORT: 3305
+   
+ api-gateway:
+   depends_on:
+     - boeking-service
+     - catalogus-service
+     - profiel-service
+   image: vsensodyne/api-gateway
+   ports:
+     - 8083:8083
+   links:
+     - boeking-service
+     - catalogus-service
+     - profiel-service
+
 
 
 volumes:
