@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Array;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +35,11 @@ public class ProfielService {
     }
 
     public List<ProfielResponse> getAllProfielen() {
-        return profielRepository.findAll();
+        return profielRepository.findAll().stream()
+                .map(profiel ->
+                        ProfielResponse.builder()
+                                .actief(profiel.isActief())
+                                .build()
+                ).collect(Collectors.toList());
     }
 }
