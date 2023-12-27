@@ -1,5 +1,6 @@
 package fact.it.catalogusservice.controller;
 import fact.it.catalogusservice.dto.CatalogusResponse;
+import fact.it.catalogusservice.model.Catalogus;
 import fact.it.catalogusservice.service.CatalogusService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

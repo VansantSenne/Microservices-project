@@ -37,7 +37,7 @@ public class BoekingService {
                 .toList();
 
         CatalogusResponse[] catalogusResponseArray = webClient.get()
-                .uri("http://" + catalogusServiceBaseUrl + "/api/inventory",
+                .uri("http://" + catalogusServiceBaseUrl + "/api/catalogus",
                         uriBuilder -> uriBuilder.queryParam("vluchtNummer", vluchtNummers).build())
                 .retrieve()
                 .bodyToMono(CatalogusResponse[].class)
@@ -100,14 +100,14 @@ public class BoekingService {
         return boekingen.stream().map(this::toBoekingResponse).collect(Collectors.toList());
     }
 
-    private BoekingResponse toBoekingResponse(Boeking boeking) {
+    public BoekingResponse toBoekingResponse(Boeking boeking) {
         BoekingResponse boekingResponse = new BoekingResponse();
         boekingResponse.setBoekingNummer(boeking.getBoekingNummer());
         boekingResponse.setProfielId(boeking.getProfielId());
         boekingResponse.setBoekingLineOrdersList(boeking.getBoekingLineOrdersList().stream().map(this::toBoekingLineOrderDto).collect(Collectors.toList()));
         return boekingResponse;
     }
-    private BoekingLineOrder toBoekingLineOrder(BoekingLineOrderDto boekingLineOrderDto){
+    public BoekingLineOrder toBoekingLineOrder(BoekingLineOrderDto boekingLineOrderDto){
         BoekingLineOrder boekingLineOrder = new BoekingLineOrder();
         boekingLineOrder.setPrijs(boekingLineOrderDto.getPrijs());
         boekingLineOrder.setHoeveelheid(boekingLineOrderDto.getHoeveelheid());

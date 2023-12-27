@@ -1,94 +1,165 @@
 package fact.it.boekingservice;
-
-
-
-import fact.it.boekingservice.dto.BoekingLineOrderDto;
-import fact.it.boekingservice.dto.BoekingResponse;
-import fact.it.boekingservice.dto.BoekingRequest;
-
+import fact.it.boekingservice.dto.*;
 import fact.it.boekingservice.model.Boeking;
 import fact.it.boekingservice.model.BoekingLineOrder;
 import fact.it.boekingservice.repository.BoekingRepository;
 import fact.it.boekingservice.service.BoekingService;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.util.ReflectionTestUtils;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Function;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class BoekingserviceUnitTest {
-
+class BoekingServiceUnitTest {
 
     @InjectMocks
     private BoekingService boekingService;
 
     @Mock
-    private ProductRepository productRepository;
+    private BoekingRepository boekingRepository;
+
+    @Mock
+    private WebClient webClient;
+
+    @Mock
+    private WebClient.RequestHeadersUriSpec requestHeadersUriSpec;
+
+    @Mock
+    private WebClient.RequestHeadersSpec requestHeadersSpec;
+
+    @Mock
+    private WebClient.ResponseSpec responseSpec;
+
+    @BeforeEach
+    void setUp() {
+        ReflectionTestUtils.setField(boekingService, "catalogusServiceBaseUrl", "http://localhost:8082");
+    }
+
     @Test
-    public void testMaakBoeking() {
+    void testMaakBoeking_FlightAvailable() {
         // Arrange
-        BoekingRequest boekingRequest = new BoekingRequest();
-        boekingRequest.setProfielId(1L);
-        boekingRequest.getBoekingLineOrderDtoList().add(new BoekingLineOrderDto("KL1234", 2));
-        boekingRequest.getBoekingLineOrderDtoList().add(new BoekingLineOrderDto("BE5678", 1));
+        BoekingRequest boekingRequest = createSampleBoekingRequest();
+
+        // Mocking behavior of BoekingRepository
+        when(boekingRepository.save(any(Boeking.class))).thenReturn(new Boeking());
+
+        // Mocking behavior of WebClient
+        CatalogusResponse[] catalogusResponseArray = {
+                new CatalogusResponse("1234", BigDecimal.valueOf(500), false)
+        };
+
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(anyString(), any(Function.class))).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono((Class<Object>) any())).thenReturn(Mono.just(catalogusResponseArray));
 
         // Act
-        boolean isBoekingSuccesvol = boekingService.maakBoeking(boekingRequest);
+        boolean result = boekingService.maakBoeking(boekingRequest);
 
         // Assert
-        assertThat(isBoekingSuccesvol).isTrue();
+        assertTrue(result);
+        verify(boekingRepository, times(1)).save(any(Boeking.class));
     }
+
     @Test
-    public void testPutBoekingLineOrder() {
+    void testMaakBoeking_FlightNotAvailable() {
         // Arrange
+        BoekingRequest boekingRequest = createSampleBoekingRequest();
+
+        // Mocking behavior of WebClient
+        CatalogusResponse[] catalogusResponseArray = {
+                new CatalogusResponse("1234", BigDecimal.valueOf(500), true)
+        };
+
+        when(webClient.get()).thenReturn(requestHeadersUriSpec);
+        when(requestHeadersUriSpec.uri(anyString(), any(Function.class))).thenReturn(requestHeadersSpec);
+        when(requestHeadersSpec.retrieve()).thenReturn(responseSpec);
+        when(responseSpec.bodyToMono((Class<Object>) any())).thenReturn(Mono.just(catalogusResponseArray));
+
+        // Act
+        boolean result = boekingService.maakBoeking(boekingRequest);
+
+        // Assert
+        assertFalse(result);
+        verify(boekingRepository, never()).save(any(Boeking.class));
+    }
+
+
+
+
+    @Test
+    void putBoekingLineOrder_Successful() {
+        Boeking boeking = createSampleBoeking();
+        BoekingLineOrderDto boekingLineOrderDto = createSampleBoekingLineOrderDto();
+
+        when(boekingRepository.findByBoekingNummer(any()))
+                .thenReturn(boeking);
+
+        assertTrue(boekingService.putBoekingLineOrder(boeking.getBoekingNummer(), boekingLineOrderDto));
+    }
+
+    @Test
+    void deleteBoeking_Successful() {
+        Boeking boeking = createSampleBoeking();
+        when(boekingRepository.findByBoekingNummer(any()))
+                .thenReturn(boeking);
+
+        assertTrue(boekingService.deleteBoeking(boeking.getBoekingNummer()));
+    }
+
+    @Test
+    void getBoekingen_Successful() {
+        Long profielId = 1L;
+        List<Boeking> boekingen = Arrays.asList(createSampleBoeking());
+
+        when(boekingRepository.findByProfielId(eq(profielId)))
+                .thenReturn(boekingen);
+
+        List<BoekingResponse> result = boekingService.getBoekingen(profielId);
+        assertFalse(result.isEmpty());
+    }
+
+    // Helper methods to create sample objects for testing
+
+    private BoekingRequest createSampleBoekingRequest() {
+        BoekingLineOrderDto boekingLineOrderDto = createSampleBoekingLineOrderDto();
+        return new BoekingRequest(1L, Arrays.asList(boekingLineOrderDto));
+    }
+
+    private BoekingLineOrderDto createSampleBoekingLineOrderDto() {
+        return new BoekingLineOrderDto(1L, "ABC123", BigDecimal.valueOf(500.00), 2, null);
+    }
+
+    private Boeking createSampleBoeking() {
         Boeking boeking = new Boeking();
-        boeking.setBoekingNummer("123456");
-        boeking.getBoekingLineOrdersList().add(new BoekingLineOrder("KL1234", 2));
+        boeking.setBoekingNummer(UUID.randomUUID().toString());
+        boeking.setProfielId(1L);
 
-        BoekingLineOrderDto boekingLineOrderDto = new BoekingLineOrderDto();
-        boekingLineOrderDto.setVluchtNummer("KL1234");
-        boekingLineOrderDto.setPrijs(500);
-        boekingLineOrderDto.setHoeveelheid(1);
+        BoekingLineOrder boekingLineOrder = new BoekingLineOrder();
+        boekingLineOrder.setVluchtNummer("ABC123");
+        boekingLineOrder.setPrijs(BigDecimal.valueOf(500.00));
+        boekingLineOrder.setHoeveelheid(2);
 
-        // Act
-        boolean isBoekingLineOrderSuccesvol = boekingService.putBoekingLineOrder("123456", boekingLineOrderDto);
-
-        // Assert
-        assertThat(isBoekingLineOrderSuccesvol).isTrue();
-
-        // Controleer dat de boekingsregel is bijgewerkt
-        Boeking updatedBoeking = boekingRepository.findByBoekingNummer("123456");
-        BoekingLineOrder updatedBoekingLineOrder = updatedBoeking.getBoekingLineOrdersList().stream()
-                .filter(lineOrder -> lineOrder.getVluchtNummer().equals("KL1234"))
-                .findFirst()
-                .orElse(null);
-
-        assertThat(updatedBoekingLineOrder.getPrijs()).isEqualTo(500);
-        assertThat(updatedBoekingLineOrder.getHoeveelheid()).isEqualTo(1);
+        boeking.setBoekingLineOrdersList(Arrays.asList(boekingLineOrder));
+        return boeking;
     }
-    @Test
-    public void testDeleteBoeking() {
-        // Arrange
-        Boeking boeking = new Boeking();
-        boeking.setBoekingNummer("123456");
-
-        // Act
-        boolean isBoekingSuccesvol = boekingService.deleteBoeking("123456");
-
-        // Assert
-        assertThat(isBoekingSuccesvol).isTrue();
-
-        // Controleer dat de boeking is verwijderd
-        assertThat(boekingRepository.findByBoekingNummer("123456")).isNull();
-    }
-
-
 }

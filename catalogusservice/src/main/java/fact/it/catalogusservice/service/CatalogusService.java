@@ -21,7 +21,7 @@ public class CatalogusService {
 
     @PostConstruct
     public void loadData() {
-        if(catalogusRepository.count() > 0){
+        if(catalogusRepository.count() <= 0){
             Catalogus catalogus = new Catalogus();
             catalogus.setVluchtNummer("tube6in");
             catalogus.setPrijs(BigDecimal.valueOf(400));
