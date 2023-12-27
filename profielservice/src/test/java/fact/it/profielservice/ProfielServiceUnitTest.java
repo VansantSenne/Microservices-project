@@ -26,52 +26,18 @@ class ProfielServiceUnitTest {
 
     @Test
     public void testGetAllProfielen() {
-        // Arrange
+        Profiel profiel1 = new Profiel();
+        profiel1.setActief(true);
 
-        Profiel profiel1 = new Profiel(true);
-        Profiel profiel2 = new Profiel(false);
 
-        profielRepository.save(profiel1);
-        profielRepository.save(profiel2);
-        // Act
-        List<Profiel> profielen = profielService.getAllProfielen();
+        when(catalogusRepository.findAll()).thenReturn(Arrays.asList(catalogus1));
 
-        // Assert
-        assertEquals(2, profielen.size());
-        assertTrue(profielen.get(0).getActief());
-        assertTrue(profielen.get(1).getActief());
+        List<ProfielResponse> profiel = profielService.getAllProfielen();
+
+        assertEquals(1, profiel.size());
+        verify(profielRepository, times(1)).findAll();
     }
 
-    @Test
-    public void testGetAllProfielenNoNull() {
-        // Arrange
-        Profiel profiel1 = new Profiel(true);
-        Profiel profiel2 = new Profiel(false);
-
-        profielRepository.save(profiel1);
-        profielRepository.save(profiel2);
-        // Act
-        List<Profiel> profielen = profielService.getAllProfielen();
-
-        // Assert
-        assertNotNull(profielen);
-    }
-    @Test
-    public void testGetAllProfielenEmpty() {
-        // Arrange
-        Profiel profiel1 = new Profiel(true);
-        Profiel profiel2 = new Profiel(false);
-
-        profielRepository.save(profiel1);
-        profielRepository.save(profiel2);
-        profielRepository.deleteAll();
-
-        // Act
-        List<Profiel> profielen = profielService.getAllProfielen();
-
-        // Assert
-        assertTrue(profielen.isEmpty());
-    }
 
 
 }

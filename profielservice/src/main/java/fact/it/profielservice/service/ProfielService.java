@@ -33,7 +33,7 @@ public class ProfielService {
         }
     }
 
-    public List<Profiel> getAllProfielen() {
+    public List<ProfielResponse> getAllProfielen() {
         return profielRepository.findAll();
     }
 }
