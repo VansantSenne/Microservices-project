@@ -47,8 +47,7 @@ services:
    
  catalogus-service:
   depends_on:
-    mysql-catalogus:
-     condition: service_healthy
+    - mysql-catalogus
   image: vsensodyne/catalogusservice
   ports:
     - 8082:8082
@@ -62,8 +61,7 @@ services:
 
  profiel-service:
   depends_on:
-    mysql-profiel:
-     condition: service_healthy
+    - mysql-profiel
   image: vsensodyne/profielservice
   ports:
     - 8080:8080
