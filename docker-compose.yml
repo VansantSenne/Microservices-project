@@ -57,7 +57,7 @@ services:
    MYSQL_DB_USERNAME: root
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-catalogus
-   MYSQL_DB_PORT: 3307
+   MYSQL_DB_PORT: 3306
 
  profiel-service:
   depends_on:
@@ -71,7 +71,7 @@ services:
    MYSQL_DB_USERNAME: root
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-profiel
-   MYSQL_DB_PORT: 3309 
+   MYSQL_DB_PORT: 3306 
 
  boeking-service:
   depends_on:
@@ -86,7 +86,7 @@ services:
    MYSQL_DB_USERNAME: root
    MYSQL_DB_PASSWORD: abc123
    MYSQL_DB_HOST: mysql-boeking
-   MYSQL_DB_PORT: 3305
+   MYSQL_DB_PORT: 3306
    
  api-gateway:
    depends_on:
