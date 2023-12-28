@@ -100,7 +100,10 @@ services:
      - boeking-service
      - catalogus-service
      - profiel-service
-
+   environment:
+     - CATALOGUS_SERVICE_BASEURL: catalogus-service:8082
+     - BOEKING_SERVICE_BASERURL: boeking-service:8081
+     - PROFIEL_SERVICE_BASEURL: profiel-service:8080
 
 
 volumes:
