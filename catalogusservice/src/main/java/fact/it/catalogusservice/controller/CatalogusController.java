@@ -16,7 +16,7 @@ public class CatalogusController {
     private final CatalogusService catalogusService;
 
     // http://localhost:8082/api/inventory?skuCode=tube6in&skuCode=beam10ft
-    @GetMapping
+    @GetMapping("vluchtnummer")
     @ResponseStatus(HttpStatus.OK)
     public List<CatalogusResponse> available
     (@RequestParam List<String> vluchtNummer) {
