@@ -25,35 +25,35 @@ spring:
     gateway:
       routes:
         - id: boeking-service-post
-          uri: http://localhost:8081
+          uri: http://${BOEKING_SERVICE_BASEURL:localhost:8081}
           predicates:
             - Path=/boekingen
             - Method=POST
           filters:
             - SetPath=/api/boeking
         - id: boeking-service-get
-          uri: http://localhost:8081
+          uri: http://${BOEKING_SERVICE_BASEURL:localhost:8081}
           predicates:
             - Path=/boekingen
             - Method=GET
           filters:
             - SetPath=/api/boeking
         - id: boeking-service-put
-          uri: http://localhost:8081
+          uri: http://${BOEKING_SERVICE_BASEURL:localhost:8081}
           predicates:
             - Path=/boekingen/{boekingNummer}
             - Method=PUT
           filters:
             - SetPath=/api/boeking/{boekingNummer}
         - id: boeking-service-delete
-          uri: http://localhost:8081
+          uri: http://${BOEKING_SERVICE_BASEURL:localhost:8081}
           predicates:
             - Path=/boekingen/{boekingNummer}
             - Method=DELETE
           filters:
             - SetPath=/api/boeking/{boekingNummer}
         - id: profiel-service-get
-          uri: http://localhost:8080
+          uri: http://${PROFIEL_SERVICE_BASEURL:localhost:8080}
           predicates:
             - Path=/profielen
             - method=GET
