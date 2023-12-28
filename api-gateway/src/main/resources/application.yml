@@ -60,7 +60,7 @@ spring:
           filters:
             - SetPath=/api/profiel
         - id: catalogus-service-get
-          uri: http://localhost:8082
+          uri: http://${CATALOGUS_SERVICE_BASEURL:localhost:8082}
           predicates:
             - Path=/catalogussen
             - Method=GET
