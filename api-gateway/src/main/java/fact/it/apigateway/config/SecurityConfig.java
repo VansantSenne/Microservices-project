@@ -18,7 +18,7 @@ public class SecurityConfig {
         System.out.println("Loading security configuration...");
         serverHttpSecurity
                 .authorizeExchange(exchange ->
-                        exchange.pathMatchers(HttpMethod.GET,"*")
+                        exchange.pathMatchers(HttpMethod.GET,"/profielen")
                                 .permitAll()
                                 .anyExchange()
                                 .authenticated()
