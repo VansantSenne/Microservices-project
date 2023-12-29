@@ -19,7 +19,7 @@ public class SecurityConfig {
             .authorizeExchange(exchange ->
                 exchange
                     .anyExchange().authenticated()
-                    .pathMatchers(HttpMethod.GET,"/catalogus").permitAll()
+                  
             )
             .oauth2ResourceServer(oauth2 -> oauth2.jwt(withDefaults()));
         return http.build();
