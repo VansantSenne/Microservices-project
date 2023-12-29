@@ -35,7 +35,7 @@ public class BoekingController {
             @PathVariable String boekingNummer,
             @RequestBody BoekingLineOrderDto boekingLineOrderDto
     ) {
-        boolean success = boekingService.putBoekingLineOrder(boekingLineOrderDto.getId(), boekingLineOrderDto);
+        boolean success = boekingService.putBoekingLineOrder(boekingNummer, boekingLineOrderDto);
     
         if (success) {
             return ResponseEntity.ok("BoekingLineOrder successfully updated.");
