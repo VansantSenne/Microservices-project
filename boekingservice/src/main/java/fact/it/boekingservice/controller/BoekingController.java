@@ -35,14 +35,15 @@ public class BoekingController {
             @PathVariable String boekingNummer,
             @RequestBody BoekingLineOrderDto boekingLineOrderDto
     ) {
-        boolean success = boekingService.putBoekingLineOrder(boekingNummer, boekingLineOrderDto);
-
+        boolean success = boekingService.putBoekingLineOrder(boekingLineOrderDto.getId(), boekingLineOrderDto);
+    
         if (success) {
             return ResponseEntity.ok("BoekingLineOrder successfully updated.");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Boeking or BoekingLineOrder not found.");
         }
     }
+
     @DeleteMapping("/{boekingNummer}")
     public ResponseEntity<String> deleteBoeking(@PathVariable String boekingNummer) {
         boolean success = boekingService.deleteBoeking(boekingNummer);
