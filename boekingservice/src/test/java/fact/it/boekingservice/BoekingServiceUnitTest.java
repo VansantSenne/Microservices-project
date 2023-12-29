@@ -146,7 +146,7 @@ class BoekingServiceUnitTest {
     }
 
     private BoekingLineOrderDto createSampleBoekingLineOrderDto() {
-        return new BoekingLineOrderDto(1L, "ABC123", BigDecimal.valueOf(500.00), 2, null);
+        return new BoekingLineOrderDto(1L, "ABC123", BigDecimal.valueOf(500.00), 2);
     }
 
     private Boeking createSampleBoeking() {
@@ -155,6 +155,7 @@ class BoekingServiceUnitTest {
         boeking.setProfielId(1L);
 
         BoekingLineOrder boekingLineOrder = new BoekingLineOrder();
+        boekingLineOrder.setId(Long.valueOf(1));
         boekingLineOrder.setVluchtNummer("ABC123");
         boekingLineOrder.setPrijs(BigDecimal.valueOf(500.00));
         boekingLineOrder.setHoeveelheid(2);

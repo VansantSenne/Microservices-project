@@ -16,6 +16,5 @@ public class BoekingLineOrderDto {
     private String vluchtNummer;
     private BigDecimal prijs;
     private Integer hoeveelheid;
-    private Optional<Long> beoordelingId;
 
 }

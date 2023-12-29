@@ -4,10 +4,13 @@ package fact.it.beoordelingservice.service;
 import fact.it.beoordelingservice.dto.BeoordelingsResponse;
 import fact.it.beoordelingservice.model.Beoordeling;
 import fact.it.beoordelingservice.repository.BeoordelingsRepository;
+import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @RequiredArgsConstructor
 public class BeoordelingsService {
@@ -16,12 +19,12 @@ public class BeoordelingsService {
 
     @PostConstruct
     public void loadData() {
-        if(BeoordelingsRepository.count() <= 0){
+        if(beoordelingsRepository.count() <= 0){
             Beoordeling beoordeling = new Beoordeling();
-            beoordeling.setProfielId(3);
-            beoordeling.setVluchtNummer("ABC123")
+            beoordeling.setProfielId(Long.valueOf(3));
+            beoordeling.setVluchtNummer("ABC123");
             beoordeling.setSter(5);
-            beoordeling.setBeschrijving("mooi")
+            beoordeling.setBeschrijving("mooi");
 
 
    
@@ -31,14 +34,14 @@ public class BeoordelingsService {
         }
     }
 
-    public List<BeoordelingResponse> getAllBeoordelingen() {
+    public List<BeoordelingsResponse> getAllBeoordelingen() {
         return beoordelingsRepository.findAll().stream()
                 .map(beoordeling ->
-                        BeoordelingResponse.builder()
-                                .profielId(beoordeling.GetProfielId())
-                                .vluchtNummer(beoordeling.GetVluchtNummer())
-                                .ster(beoordeling.GetSter())
-                                .beschrijving(beoordeling.GetBeschrijving())
+                        BeoordelingsResponse.builder()
+                                .profielId(beoordeling.getProfielId())
+                                .vluchtNummer(beoordeling.getVluchtNummer())
+                                .ster(beoordeling.getSter())
+                                .beschrijving(beoordeling.getBeschrijving())
                                 .build()
                 ).collect(Collectors.toList());
     }
