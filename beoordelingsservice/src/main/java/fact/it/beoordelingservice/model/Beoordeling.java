@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 public class Beoordeling {
 
     private String id;
-    private String code;
+    private String vluchtnummer;
     private Integer ster;
     private String beschrijving;
 }
