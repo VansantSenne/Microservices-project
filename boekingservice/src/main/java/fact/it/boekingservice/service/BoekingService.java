@@ -38,7 +38,7 @@ public class BoekingService {
 
         CatalogusResponse[] catalogusResponseArray = webClient.get()
                 .uri("http://" + catalogusServiceBaseUrl + "/api/catalogus",
-                        uriBuilder -> uriBuilder.queryParam("vluchtNummer", vluchtNummers).build())
+                        uriBuilder -> uriBuilder.queryParam("vluchtnummer", vluchtNummers).build())
                 .retrieve()
                 .bodyToMono(CatalogusResponse[].class)
                 .block();
