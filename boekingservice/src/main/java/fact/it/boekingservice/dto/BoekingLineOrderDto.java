@@ -12,7 +12,7 @@ import java.util.Optional;
 @NoArgsConstructor
 
 public class BoekingLineOrderDto {
-    private Long id;
+    public Long id;
     private String vluchtNummer;
     private BigDecimal prijs;
     private Integer hoeveelheid;
