@@ -12,8 +12,9 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class BeoordelingsResponse {
-    private String id;
-    private String code;
+    private Long id;
+    private String vluchtNummer;
+    private Long profielId;
     private Integer ster;
     private String beschrijving;
 }
