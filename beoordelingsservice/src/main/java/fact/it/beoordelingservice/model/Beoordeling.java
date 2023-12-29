@@ -17,6 +17,7 @@ public class Beoordeling {
 
     private Long id;
     private Long profielId;
+    private String vluchtNummer;
     private Integer ster;
     private String beschrijving;
 }
