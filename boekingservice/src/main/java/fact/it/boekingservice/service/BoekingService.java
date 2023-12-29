@@ -59,31 +59,32 @@ public class BoekingService {
             return false;
         }
     }
-    public boolean putBoekingLineOrder(String boekingNummer, BoekingLineOrderDto boekingLineOrderDto) {
-        Boeking boeking = boekingRepository.findByBoekingNummer(boekingNummer);
+    public boolean putBoekingLineOrder(Long id, BoekingLineOrderDto boekingLineOrderDto) {
+    Boeking boeking = boekingRepository.findByBoekingNummer(boekingNummer);
 
-        if (boeking != null) {
-            // Zoek de boekingsregel die moet worden bijgewerkt
-            BoekingLineOrder boekingLineOrder = boeking.getBoekingLineOrdersList().stream()
-                    .filter(lineOrder -> lineOrder.getVluchtNummer().equals(boekingLineOrderDto.getVluchtNummer()))
-                    .findFirst()
-                    .orElse(null);
+    if (boeking != null) {
+        // Zoek de boekingsregel die moet worden bijgewerkt op basis van de id
+        BoekingLineOrder boekingLineOrder = boeking.getBoekingLineOrdersList().stream()
+                .filter(lineOrder -> lineOrder.getId().equals(id))
+                .findFirst()
+                .orElse(null);
 
-            if (boekingLineOrder != null) {
-                // Werk de boekingsregel bij met de nieuwe informatie
-                boekingLineOrder.setPrijs(boekingLineOrderDto.getPrijs());
-                boekingLineOrder.setHoeveelheid(boekingLineOrderDto.getHoeveelheid());
+        if (boekingLineOrder != null) {
+            // Werk de boekingsregel bij met de nieuwe informatie
+            boekingLineOrder.setPrijs(boekingLineOrderDto.getPrijs());
+            boekingLineOrder.setHoeveelheid(boekingLineOrderDto.getHoeveelheid());
 
-                // Andere velden blijven ongewijzigd
+            // Andere velden blijven ongewijzigd
 
-                // Opslaan van de bijgewerkte boeking
-                boekingRepository.save(boeking);
-                return true;
-            }
+            // Opslaan van de bijgewerkte boeking
+            boekingRepository.save(boeking);
+            return true;
         }
-
-        return false;
     }
+
+    return false;
+}
+
     public boolean deleteBoeking(String boekingNummer) {
         Boeking boeking = boekingRepository.findByBoekingNummer(boekingNummer);
 
