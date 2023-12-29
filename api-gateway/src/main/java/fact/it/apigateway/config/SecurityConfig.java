@@ -18,7 +18,7 @@ public class SecurityConfig {
         System.out.println("Loading security configuration...");
         serverHttpSecurity
                 .authorizeExchange(exchange ->
-                        exchange.pathMatchers(HttpMethod.GET,"/api/**")
+                        exchange.pathMatchers(HttpMethod.GET,"*")
                                 .permitAll()
                                 .anyExchange()
                                 .authenticated()
