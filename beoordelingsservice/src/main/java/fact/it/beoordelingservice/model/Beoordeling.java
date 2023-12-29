@@ -15,8 +15,8 @@ import java.math.BigDecimal;
 @Data
 public class Beoordeling {
 
-    private String id;
-    private String vluchtnummer;
+    private Long id;
+    private Long profielId;
     private Integer ster;
     private String beschrijving;
 }
