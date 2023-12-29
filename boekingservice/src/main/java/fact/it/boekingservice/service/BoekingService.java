@@ -59,13 +59,13 @@ public class BoekingService {
             return false;
         }
     }
-    public boolean putBoekingLineOrder(Long id, BoekingLineOrderDto boekingLineOrderDto) {
+    public boolean putBoekingLineOrder(String boekingNummer, BoekingLineOrderDto boekingLineOrderDto) {
     Boeking boeking = boekingRepository.findByBoekingNummer(boekingNummer);
 
     if (boeking != null) {
         // Zoek de boekingsregel die moet worden bijgewerkt op basis van de id
         BoekingLineOrder boekingLineOrder = boeking.getBoekingLineOrdersList().stream()
-                .filter(lineOrder -> lineOrder.getId().equals(id))
+                .filter(lineOrder -> lineOrder.getId().equals(boekingLineOrderDto.id))
                 .findFirst()
                 .orElse(null);
 
