@@ -15,3 +15,29 @@ We hebben het ook mogelijk gemaakt om als gebruiker een beoordeling over een bep
 
 # Componenten
 <img src="./resources/schema.JPG"  style="height: 350px"/>
+
+Binnen het project maken we gebruik van volgende componenten:
+  - Docker/docker-compose voor het containerizen van onze microservices
+  - MySQL/MongoDB voor het opslaan van onze data
+  - Java, Maven voor het bouwen en testen van onze services
+  - Api-gateway voor het beheren van toegang tot en de samenwerking tussen onze microservices
+  - Github Actions voor het opstellen van de CI/CD pijplijn die onze docker images zal builden
+
+
+# Aantoonbare werking van alle endpoints binnen onze applicatie:
+## Met authorisatie:
+<img src="./resources/catalogussen.JPG" style="height: 350px"/>
+<img src="./resources/boekingenPOST.JPG"  style="height: 350px"/>
+<img src="./resources/boekingenGET.JPG"  style="height: 350px"/>
+<img src="./resources/boekingenPUT.JPG"  style="height: 350px"/>
+<img src="./resources/boekingenDELETE.JPG"  style="height: 350px"/>
+<img src="./resources/profielenGET.JPG"  style="height: 350px"/>
+
+## Zonder authorisatie
+<img src="./resources/profielenNoAuth.JPG"  style="height: 350px"/>
+<img src="./resources/catalogussenNoAuth.JPG"  style="height: 350px"/>
+
+
+
+
+
