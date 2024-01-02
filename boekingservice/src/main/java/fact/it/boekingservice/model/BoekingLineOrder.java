@@ -21,5 +21,4 @@ public class BoekingLineOrder {
     private String vluchtNummer;
     private BigDecimal prijs;
     private Integer hoeveelheid;
-    private Long beoordelingId;
 }

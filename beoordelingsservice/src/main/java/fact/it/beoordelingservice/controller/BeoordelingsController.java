@@ -20,7 +20,7 @@ public class BeoordelingsController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<BeoordelingResponse> getAllBeoordelingen() {
+    public List<BeoordelingsResponse> getAllBeoordelingen() {
         return beoordelingsService.getAllBeoordelingen();
     }
 }
