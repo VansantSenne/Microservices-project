@@ -27,7 +27,7 @@ class BeoordelingServiceUnitTest {
     private BeoordelingsRepository beoordelingsRepository;
 
     @Test
-    public void testGetAllProfielen() {
+    public void testGetAllBeoordelingen() {
         Beoordeling beoordeling = new Beoordeling();
         beoordeling.setProfielId(Long.valueOf(3));
         beoordeling.setVluchtNummer("ABC123");
